@@ -7,9 +7,11 @@ stages {
 stage('Build') {
 
 steps {
-
-bat 'javac HelloWorld.java'
-  bat 'java -version'
+sh("""
+                    echo this operation takes a long time
+                    """)
+// bat 'javac HelloWorld.java'
+//   bat 'java -version'
 
 }
 
