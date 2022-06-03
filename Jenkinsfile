@@ -1,26 +1,26 @@
 pipeline {
-
-agent any
-
-stages {
-
-stage('Build') {
-
-steps {
-     //echo "Hello World"      
- bat 'javac HelloWorld.java'
-   bat 'java -version'
-
-}
-
-}
-
-stage('Run') {
-
-steps {
-//echo "Hello World"
-bat 'java HelloWorld'
-}
-}
-}
+  environment {
+    registry = "pujithavarada/hello-docker-java"
+    registryCredential = 'pujitha_id'
+    dockerImage = ''
+  }
+  agent any
+  stages {
+    stage('Build image') {
+      steps{
+        script {
+          dockerImage = docker.build registry + ":$BUILD_NUMBER"
+        }
+      }
+    }
+    stage('Deploy Image') {
+      steps{
+        script {
+          docker.withRegistry( '', registryCredential ) {
+            dockerImage.push()
+          }
+        }
+      }
+    }
+  }
 }
